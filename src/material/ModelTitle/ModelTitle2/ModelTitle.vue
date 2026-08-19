@@ -25,6 +25,7 @@
     .icon-box {
       width: 26px;
       height: 26px;
+      flex-shrink: 0;
       background-color: v-bind('modelStyle.themeColor');
       border-radius: 50%;
       display: flex;
@@ -36,13 +37,18 @@
       }
     }
     .right-title {
-      width: 100%;
-      border-bottom: 1px solid v-bind('modelStyle.themeColor');
-      height: 30px;
+      flex: 1;
       display: flex;
+      align-items: center;
+      border-bottom: 1px solid v-bind('modelStyle.themeColor');
+      padding-bottom: 6px;
+      min-height: 26px;
       h1 {
+        margin: 0;
         font-size: v-bind('modelStyle.firstTitleFontSize');
         color: v-bind('modelStyle.themeColor');
+        line-height: 1.2;
+        font-weight: 600;
       }
     }
   }

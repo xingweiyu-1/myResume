@@ -29,6 +29,8 @@ const txt = (text: string, opts: any = {}) =>
 const sectionTitle = (text: string, themeColor: string) =>
   new Paragraph({
     spacing: { before: 240, after: 120 },
+    keepNext: true,
+    keepLines: true,
     children: [
       txt(text, { size: 28, bold: true, color: themeColor || '#000000' }), // 14pt
     ],
@@ -38,6 +40,8 @@ const sectionTitle = (text: string, themeColor: string) =>
 const entryTitle = (title: string, date: string, themeColor: string) =>
   new Paragraph({
     spacing: { before: 120, after: 60 },
+    keepNext: true,
+    keepLines: true,
     children: [
       txt(title, { size: 24, bold: true, color: '#222222' }), // 12pt
       ...(date
@@ -57,9 +61,18 @@ const entryTitle = (title: string, date: string, themeColor: string) =>
 const bodyLine = (text: string, indent = false) =>
   new Paragraph({
     spacing: { after: 40 },
+    keepLines: true,
     children: [txt(text)],
     bullet: indent ? { level: 0 } : undefined,
   })
+
+const pushLines = (children: any[], text: string, indent = false) => {
+  String(text || '')
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .forEach((line) => children.push(bodyLine(line, indent)))
+}
 
 // 基本信息
 function buildBaseInfo(children: any[], d: any, gs: any) {
@@ -154,13 +167,13 @@ function buildExperience(children: any[], d: any, type: string, gs: any) {
     children.push(entryTitle(titleParts.join(''), formatDate(item.date), gs.themeColor))
     // 校园经历是单字段描述
     if (type === '校园经历') {
-      if (d.isShow?.campusDuty && item.campusDuty) children.push(bodyLine(`职责：${item.campusDuty}`))
-      if (d.isShow?.campusContent && item.campusContent) children.push(bodyLine(item.campusContent))
+      if (d.isShow?.campusDuty && item.campusDuty) pushLines(children, `职责：${item.campusDuty}`)
+      if (d.isShow?.campusContent && item.campusContent) pushLines(children, item.campusContent)
     } else {
       const contentArr =
         type === '项目经历' ? item.projectContent : type === '实习经历' ? item.jobContent : item.jobContent
       contentArr?.forEach((c: any) => {
-        if (c.content) children.push(bodyLine(c.content, true))
+        if (c.content) pushLines(children, c.content, true)
       })
     }
   })
@@ -178,13 +191,13 @@ function buildAwards(children: any[], d: any) {
 // 简单文本模块：自我评价 / 兴趣爱好 / 自定义
 function buildSimple(children: any[], d: any, defaultTitle: string) {
   children.push(sectionTitle(d.title || defaultTitle, ''))
-  if (d.content) children.push(bodyLine(d.content))
+  if (d.content) pushLines(children, d.content)
 }
 
 function buildCustom(children: any[], d: any) {
   children.push(sectionTitle(d.title || '自定义模块', ''))
-  if (d.name) children.push(bodyLine(d.name, true))
-  if (d.abstract) children.push(bodyLine(d.abstract, true))
+  if (d.name) pushLines(children, d.name, true)
+  if (d.abstract) pushLines(children, d.abstract, true)
 }
 
 // 作品展示
@@ -198,7 +211,7 @@ function buildWorks(children: any[], d: any) {
   })
 }
 
-/** 导出 .docx */
+/** 导出 .docx（从 JSON 生成，不含编辑器分页参考线） */
 export const exportDocx = async (resume: any) => {
   const gs = resume.GLOBAL_STYLE || {}
   const children: any[] = []

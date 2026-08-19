@@ -167,7 +167,9 @@
     exportPdfByPrint(resumeJsonNewStore.value.TITLE || '简历');
   };
   const generatePdfByImage = async () => {
-    await exportPdfByImage(html2Pdf.value, resumeJsonNewStore.value.TITLE || '简历');
+    // 只截简历正文，避开分页参考线
+    const target = htmlContentPdf.value || html2Pdf.value;
+    await exportPdfByImage(target, resumeJsonNewStore.value.TITLE || '简历');
   };
   const generateWord = async () => {
     try {
@@ -264,11 +266,18 @@
     }
   }
 
-  /* ===== 打印样式：只打印简历主体，A4 ===== */
+  /* ===== 打印样式：整页 A4，零边距，避免页脚把文字裁切 ===== */
   @media print {
     @page {
       size: A4;
-      margin: 10mm 8mm;
+      margin: 0;
+    }
+    html,
+    body,
+    #app {
+      height: auto !important;
+      overflow: visible !important;
+      background: #fff !important;
     }
     body {
       background: #fff !important;
@@ -295,21 +304,40 @@
       min-width: 0 !important;
     }
     .design {
-      width: 190mm !important;
+      width: 210mm !important;
       min-height: 0 !important;
+      height: auto !important;
       box-shadow: none !important;
       margin: 0 !important;
+      overflow: visible !important;
     }
     .design-content {
       height: auto !important;
+      overflow: visible !important;
     }
-    .lines {
+    .lines,
+    .edit-box {
       display: none !important;
+    }
+    .material-model-box,
+    .mode-item {
+      border-color: transparent !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    p,
+    li {
+      orphans: 3;
+      widows: 3;
+      break-inside: avoid;
+      page-break-inside: avoid;
     }
     /* 左右布局：保证两列在打印时正常 */
     .left-box,
     .right-box {
       min-height: auto !important;
+      height: auto !important;
+      overflow: visible !important;
     }
   }
 </style>

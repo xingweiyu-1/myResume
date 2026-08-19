@@ -16,3 +16,31 @@ body {
 * {
   box-sizing: border-box;
 }
+
+/* 分页参考线、模块选中框：仅编辑可见，导出/打印一律隐藏 */
+body.is-exporting {
+  .lines,
+  .edit-box {
+    display: none !important;
+  }
+  .material-model-box,
+  .mode-item {
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+  .mode-item.isHover::after {
+    display: none !important;
+  }
+}
+
+@media print {
+  .lines,
+  .edit-box {
+    display: none !important;
+  }
+  .material-model-box,
+  .mode-item {
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+}
