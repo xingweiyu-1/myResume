@@ -55,8 +55,11 @@
       display: flex;
       margin-top: 25px;
       justify-content: space-between;
+      flex-wrap: wrap;
+      row-gap: 8px;
       li {
         list-style: none;
+        white-space: nowrap;
         font-size: v-bind('modelStyle.textFontSize');
         color: v-bind('modelStyle.textColor');
         font-weight: v-bind('modelStyle.textFontWeight');
