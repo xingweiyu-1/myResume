@@ -38,13 +38,16 @@
     background: url(../../../assets/images/template3_bg_2.png);
     background-repeat: no-repeat;
     width: 100%;
-    height: 250px;
+    min-height: 250px;
     border-bottom: 1px dashed #cfcfcf;
     box-sizing: border-box;
     padding: 40px 50px;
     padding-left: 30px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
     margin-bottom: v-bind('modelStyle.mBottom');
     margin-top: v-bind('modelStyle.mTop');
     padding-top: v-bind('modelStyle.pTop');
@@ -52,6 +55,7 @@
     padding-left: v-bind('modelStyle.pLeftRight');
     padding-right: v-bind('modelStyle.pLeftRight');
     .user-info {
+      width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -74,13 +78,16 @@
       .detail {
         ul {
           display: flex;
+          flex-wrap: wrap;
+          row-gap: 4px;
           li {
             list-style: none;
-            font-size: v-bind('modelStyle.textFontSize');
+            font-size: 12px;
             font-weight: v-bind('modelStyle.textFontWeight');
-            padding-right: 24px;
+            padding-right: 12px;
             height: 18px;
-            margin-right: 10px;
+            margin-right: 8px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -93,6 +100,7 @@
       }
     }
     .avatar-box {
+      align-self: center;
       width: 116px;
       height: 146px;
       border: 3px solid #eee;
